@@ -1,36 +1,31 @@
-import os
 import google.generativeai as genai
-from dotenv import load_dotenv
 
-# Load API key securely
-load_dotenv()
-# Manually set your API key
+# Manually set your Gemini API Key here
 API_KEY = "AIzaSyAwkueAB0Bfy-bJtwxDXI2rkgqfySk3xgI"
-
 
 # Configure Gemini API
 genai.configure(api_key=API_KEY)
 
-def analyze_emotion(text):
+# Function to call Gemini AI
+def generate_gemini_response(prompt):
     try:
         model = genai.GenerativeModel("gemini-1.5-pro")
-        response = model.generate_content(f"Analyze the emotional tone of this text and help the user overcome it. The steps should be very concise and precise. And also make sure that the user's requirements are fixed: {text}")
-        return response.text.strip()
+        response = model.generate_content(prompt)
+        
+        if response and response.text:
+            return response.text.strip()
+        else:
+            return "Error: No response from AI."
+    
     except Exception as e:
-        return f"Error analyzing emotion: {e}"
+        return f"Error communicating with Gemini API: {e}"
+
+# Functions for AI feedback
+def analyze_emotion(text):
+    return generate_gemini_response(f"Analyze the emotional tone of this text: {text}")
 
 def generate_reflection(text):
-    try:
-        model = genai.GenerativeModel("gemini-1.5-pro")
-        response = model.generate_content(f"Provide metacognitive feedback for this response: {text}")
-        return response.text.strip()
-    except Exception as e:
-        return f"Error generating reflection: {e}"
+    return generate_gemini_response(f"Provide metacognitive feedback for this response: {text}")
 
 def create_report(text):
-    try:
-        model = genai.GenerativeModel("gemini-1.5-pro")
-        response = model.generate_content(f"Generate a parental engagement report based on this feedback: {text}")
-        return response.text.strip()
-    except Exception as e:
-        return f"Error generating report: {e}"
+    return generate_gemini_response(f"Generate a parental engagement report based on this feedback: {text}")
