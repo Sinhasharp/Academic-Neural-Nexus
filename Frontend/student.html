@@ -46,7 +46,6 @@
             padding: 15px;
             margin: 10px 0;
             border-radius: 10px;
-            transition: 0.3s ease;
             color: #fff;
             display: flex;
             align-items: center;
@@ -81,11 +80,6 @@
             background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
         }
 
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -93,23 +87,14 @@
     <div class="container">
         <h2>Student Dashboard</h2>
         
-        <div class="feature-box" onclick="openFeature('feedback')">
+        <div class="feature-box" onclick="window.location.href='/feedback'">
             <i class='bx bxs-message-rounded-dots'></i>
             <span>Student - AI - Teacher Feedback System</span>
         </div>
-        
-        <div class="feature-box" onclick="openFeature('quiz')">
-            <i class='bx bxs-book-open'></i>
-            <span>Student POP Quiz Assistance</span>
-        </div>
 
-        <div class="feature-box" onclick="openFeature('notes')">
-            <i class='bx bxs-file'></i>
-            <span>Notes Arrangement</span>
-        </div>
-
-        <button onclick="logout()">Logout</button>
+        <button onclick="window.location.href='/logout'">Logout</button>
     </div>
+
 
     <script>
         function openFeature(feature) {
@@ -126,6 +111,7 @@
 
         }
     </script>
+
 
 </body>
 </html>

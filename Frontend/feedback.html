@@ -57,11 +57,33 @@
         }
 
         .history-item:hover { background: #bbb; }
+
+        /* Back Button Styling */
+        .back-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #0029ab;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #011e7d;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- Back Button -->
+    <button onclick="goBack()" class="back-btn">← Back to Dashboard</button>
+
     <!-- Header -->
     <div class="header">
         <button class="history-btn"><i class='bx bx-history'></i></button>
@@ -90,24 +112,33 @@
 </div>
 
 <script>
+    function goBack() {
+        window.location.href = "/student";
+    }
+
     document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
         event.preventDefault();  // Prevent form submission
 
-        const messageInput = document.getElementById('messageInput').value.trim();
+        const messageInput = document.getElementById('messageInput');
+        const messageText = messageInput.value.trim();
         const chatArea = document.getElementById('chat-area');
 
-        if (!messageInput) return;
+        if (!messageText) return;
 
         // Display student message
         const studentMessage = document.createElement('div');
         studentMessage.classList.add('message', 'student-msg');
-        studentMessage.textContent = messageInput;
+        studentMessage.textContent = messageText;
         chatArea.appendChild(studentMessage);
+
+        // Clear the input box immediately after sending
+        messageInput.value = '';
 
         // Send data to Flask backend
         const response = await fetch('/feedback', {
             method: 'POST',
-            body: new FormData(document.getElementById('feedbackForm'))
+            body: new URLSearchParams({ 'studentInput': messageText }),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
 
         const data = await response.json();
@@ -118,8 +149,6 @@
         teacherReply.textContent = data.emotion_result || "Thank you for your feedback!";
         chatArea.appendChild(teacherReply);
 
-        // Clear input field
-        document.getElementById('messageInput').value = '';
         chatArea.scrollTop = chatArea.scrollHeight;
     });
 </script>
