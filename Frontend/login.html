@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PostNutClarity</title>
+    <title>Login</title>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
@@ -28,18 +28,10 @@
             background: #f3f3f3;
             border-radius: 15px;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
             padding: 20px;
             text-align: center;
-        }
-
-        .Form {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
         }
 
         h2 {
@@ -51,7 +43,6 @@
         .input-box {
             width: 90%;
             margin: 10px 0;
-            position: relative;
         }
 
         .input-box input {
@@ -81,9 +72,15 @@
             background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
         }
 
-        .small-btn {
-            font-size: 14px;
-            padding: 8px;
+        .Form {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .forgot-section {
+            margin-top: 10px;
         }
 
         .returnBtn {
@@ -126,11 +123,11 @@
             <form action="http://127.0.0.1:5000/login" method="POST">
                 <div class="input-box">
                     <i class='bx bxs-user'></i>
-                    <input type="text" placeholder="Enter Your Username*" required>
+                    <input type="text" name="username" placeholder="Enter Your Username*" required>
                 </div>
                 <div class="input-box">
                     <i class='bx bxs-lock-alt'></i>
-                    <input type="password" placeholder="Enter Your Password*" required>
+                    <input type="password" name="password" placeholder="Enter Your Password*" required>
                 </div>
                 <div class="forgot-section">
                     <span><input type="checkbox"> Remember Me</span>
