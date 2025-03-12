@@ -9,4 +9,4 @@ It can also help him/her to generating tests, notes to teach their students.
 
 On the student's side it can help them summarize notes or generate pop quizes from the notes provided by their teacher.
 
-There is also a parent mode where a student's parents can access the system to learn about their ward's performance and other aspects.(Coming Soon...)
+There is also a parent mode where a student's parents can access the system to learn about their ward's performance and other aspects. (Coming Soon...)
