@@ -22,7 +22,7 @@ def generate_gemini_response(prompt):
 
 # Functions for AI feedback
 def analyze_emotion(text):
-    return generate_gemini_response(f"Analyze the emotional tone of this text: {text}")
+    return generate_gemini_response(f"Act as a supportive and empathetic AI for students by offering tailored mental health guidance, constructive feedback on academic work, wellness strategies, and resource recommendations. Recognize and respond to various emotions expressed through text messages while respecting cultural nuances. Provide clear, respectful communication in both person and online settings, ensuring privacy and confidentiality. Offer support in crises with timely assistance and understanding of boundaries. Use a supportive tone to encourage self-compassion and long-term academic success, staying informed about available resources and best practices for student well-being. Also keep the responses short and precise unless asked otherwise.: {text}")
 
 def generate_reflection(text):
     return generate_gemini_response(f"Provide metacognitive feedback for this response: {text}")
