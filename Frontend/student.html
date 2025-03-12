@@ -95,5 +95,23 @@
         <button onclick="window.location.href='/logout'">Logout</button>
     </div>
 
+
+    <script>
+        function openFeature(feature) {
+            if (feature === 'feedback') {
+                window.location.href = "feedback.html";  // Redirect to Feedback Page
+            } else {
+                alert("Feature Coming Soon: " + feature);
+            }
+        }
+
+        function logout() {
+            alert("Logging out...");
+            window.location.href = "login.html";
+
+        }
+    </script>
+
+
 </body>
 </html>
