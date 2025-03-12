@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Feedback</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(45deg, #0c60b3, 60%, #192b8f); }
+
+        .container {
+            width: 450px; height: 600px; background: #fff;
+            border-radius: 15px; display: flex; flex-direction: column;
+            overflow: hidden; box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); position: relative;
+        }
+
+        .header { display: flex; align-items: center; padding: 15px; background: #0029ab; color: white; font-size: 18px; font-weight: 500; }
+
+        .history-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; margin-right: auto; }
+
+        .chat-area { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+
+        .message { max-width: 80%; padding: 10px 15px; border-radius: 10px; font-size: 14px; word-wrap: break-word; }
+
+        .student-msg { background: #0c60b3; color: white; align-self: flex-end; }
+        .teacher-msg { background: #ddd; color: black; align-self: flex-start; }
+
+        .input-area { display: flex; padding: 10px; background: #f1f1f1; border-top: 1px solid #ccc; }
+
+        .input-box { flex: 1; padding: 10px; border: none; border-radius: 20px; font-size: 14px; outline: none; }
+
+        .send-btn {
+            background: #0029ab; color: white; border: none;
+            padding: 10px 15px; margin-left: 10px;
+            border-radius: 50%; cursor: pointer; transition: 0.3s;
+        }
+
+        .send-btn:hover { background: #011e7d; }
+
+        .history { position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; transition: 0.5s; }
+
+        .history.active { left: 0; }
+
+        .history-header { display: flex; align-items: center; padding: 15px; background: #0029ab; color: white; font-size: 18px; }
+
+        .close-history { margin-left: auto; background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
+
+        .history-list { padding: 15px; flex: 1; overflow-y: auto; }
+
+        .history-item {
+            background: #ddd; padding: 10px; margin-bottom: 10px;
+            border-radius: 5px; cursor: pointer; transition: 0.3s;
+        }
+
+        .history-item:hover { background: #bbb; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <button class="history-btn"><i class='bx bx-history'></i></button>
+        Class Feedback
+    </div>
+
+    <!-- Chat Area -->
+    <div class="chat-area" id="chat-area">
+        <div class="message teacher-msg">Hello, what feedback do you have today?</div>
+    </div>
+
+    <!-- Input Area (Form for Flask) -->
+    <form id="feedbackForm" class="input-area">
+        <input type="text" name="studentInput" id="messageInput" class="input-box" placeholder="Type your message..." required>
+        <button type="submit" class="send-btn"><i class='bx bx-send'></i></button>
+    </form>
+
+    <!-- History Section -->
+    <div class="history" id="history">
+        <div class="history-header">
+            Feedback History
+            <button class="close-history"><i class='bx bx-x'></i></button>
+        </div>
+        <div class="history-list" id="history-list"></div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
+        event.preventDefault();  // Prevent form submission
+
+        const messageInput = document.getElementById('messageInput').value.trim();
+        const chatArea = document.getElementById('chat-area');
+
+        if (!messageInput) return;
+
+        // Display student message
+        const studentMessage = document.createElement('div');
+        studentMessage.classList.add('message', 'student-msg');
+        studentMessage.textContent = messageInput;
+        chatArea.appendChild(studentMessage);
+
+        // Send data to Flask backend
+        const response = await fetch('/feedback', {
+            method: 'POST',
+            body: new FormData(document.getElementById('feedbackForm'))
+        });
+
+        const data = await response.json();
+
+        // Display Teacher Reply
+        const teacherReply = document.createElement('div');
+        teacherReply.classList.add('message', 'teacher-msg');
+        teacherReply.textContent = data.emotion_result || "Thank you for your feedback!";
+        chatArea.appendChild(teacherReply);
+
+        // Clear input field
+        document.getElementById('messageInput').value = '';
+        chatArea.scrollTop = chatArea.scrollHeight;
+    });
+</script>
+
+</body>
+</html>
