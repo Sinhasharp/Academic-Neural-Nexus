@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #0c60b3, 60%, #192b8f);
+        }
+
+        .container {
+            width: 450px;
+            background: #fff;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
+        }
+
+        .section {
+            display: none;
+            text-align: left;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .back-btn {
+            background: none;
+            color: #007bff;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .input-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Teacher Dashboard</h2>
+
+    <div id="main-menu">
+        <button class="btn" onclick="showSection('student-review')">Student Review</button>
+        <button class="btn" onclick="showSection('notes-upload')">Notes Upload</button>
+        <button class="btn" onclick="openFeedback()">AI Assistant</button>
+        <button class="btn" onclick="showSection('quiz-creation')">Create Quizzes</button>
+        <button class="btn" onclick="showSection('other-requirements')">Other Requirements</button>
+    </div>
+
+    <!-- Student Review -->
+    <div id="student-review" class="section">
+        <h3>Student Review</h3>
+        <textarea placeholder="Write feedback about a student..."></textarea>
+        <button class="btn">Submit Review</button>
+        <button class="back-btn" onclick="showSection('main-menu')">Back</button>
+    </div>
+
+    <!-- Notes Upload -->
+    <div id="notes-upload" class="section">
+        <h3>Upload Notes</h3>
+        <input type="file" class="input-box">
+        <button class="btn">Upload</button>
+        <button class="back-btn" onclick="showSection('main-menu')">Back</button>
+    </div>
+
+    <!-- Quiz Creation -->
+    <div id="quiz-creation" class="section">
+        <h3>Create Quizzes</h3>
+        <textarea placeholder="Enter quiz questions..."></textarea>
+        <button class="btn">Generate Quiz</button>
+        <button class="back-btn" onclick="showSection('main-menu')">Back</button>
+    </div>
+
+    <!-- Other Requirements -->
+    <div id="other-requirements" class="section">
+        <h3>Other Requirements</h3>
+        <button class="btn" onclick="showSection('password-change')">Change Password</button>
+        <button class="btn" onclick="showSection('manage-students')">Manage Students</button>
+        <button class="back-btn" onclick="showSection('main-menu')">Back</button>
+    </div>
+
+    <!-- Password Change -->
+    <div id="password-change" class="section">
+        <h3>Change Password</h3>
+        <input type="password" class="input-box" placeholder="Enter New Password">
+        <button class="btn">Update Password</button>
+        <button class="back-btn" onclick="showSection('other-requirements')">Back</button>
+    </div>
+
+    <!-- Manage Students -->
+    <div id="manage-students" class="section">
+        <h3>Manage Students</h3>
+        <button class="btn">Add Student</button>
+        <button class="btn">Remove Student</button>
+        <button class="back-btn" onclick="showSection('other-requirements')">Back</button>
+    </div>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        let sections = document.querySelectorAll(".section");
+        sections.forEach(sec => sec.classList.remove("active"));
+
+        document.getElementById(sectionId).classList.add("active");
+        
+        if (sectionId === "main-menu") {
+            document.getElementById("main-menu").style.display = "block";
+        } else {
+            document.getElementById("main-menu").style.display = "none";
+        }
+    }
+
+    function openFeedback() {
+        window.location.href = "feedback.html";
+    }
+</script>
+
+</body>
+</html>
