@@ -85,6 +85,16 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+        .logout-btn {
+            background: #ff4d4d;
+            margin-top: 10px;
+        }
+
+        .logout-btn:hover {
+            background: #cc0000;
+        }
+
     </style>
 </head>
 <body>
@@ -98,6 +108,7 @@
         <button class="btn" onclick="openFeedback()">AI Assistant</button>
         <button class="btn" onclick="showSection('quiz-creation')">Create Quizzes</button>
         <button class="btn" onclick="showSection('other-requirements')">Other Requirements</button>
+        <button class="btn logout-btn" onclick="logout()">Logout</button>
     </div>
 
     <!-- Student Review -->
@@ -165,6 +176,10 @@
 
     function openFeedback() {
         window.location.href = "feedback.html";
+    }
+
+    function logout() {
+        window.location.href = "login.html";  // Redirect to login page
     }
 </script>
 
