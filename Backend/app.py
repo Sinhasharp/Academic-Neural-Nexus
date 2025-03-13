@@ -4,7 +4,7 @@ load_dotenv()
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from gemini_api import analyze_emotion, generate_reflection, create_report
-from database import validate_login
+from database import validate_login, save_feedback, get_feedback_history
 
 app = Flask(__name__, template_folder='../frontend')
 app.secret_key = "supersecretkey"  # Required for session handling
@@ -45,8 +45,11 @@ def feedback():
     if request.method == 'POST':
         student_text = request.form.get('studentInput')
 
-        if not student_text:
+        if not student_text.strip():
             return jsonify({"error": "Empty feedback provided."})
+
+        # Save feedback to the database
+        save_feedback('student', student_text)
 
         # AI Analysis Results
         emotion_result = analyze_emotion(student_text)
@@ -61,6 +64,18 @@ def feedback():
         })
 
     return render_template('feedback.html')
+
+# API to fetch Chat History (For AJAX requests)
+@app.route('/history')
+def history():
+    if 'user' not in session:
+        return jsonify({"error": "Unauthorized access"}), 403  # Return JSON error if not logged in
+
+    # Get feedback history from the database
+    feedback_history = get_feedback_history()
+
+    # Return JSON response for frontend
+    return jsonify(feedback_history)
 
 # Logout
 @app.route('/logout')
