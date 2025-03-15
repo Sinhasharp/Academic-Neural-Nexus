@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Upload</title>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #0c60b3, 60%, #192b8f);
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .upload-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .upload-box:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .preview {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            color: #fff;
+            display: none;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .button:hover {
+            background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Upload Notes</h2>
+
+        <label for="fileUpload" class="upload-box">
+            <i class='bx bx-upload' style="font-size: 24px;"></i>
+            <span>Click to Upload</span>
+        </label>
+        <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.txt" onchange="previewFile()">
+
+        <div class="preview" id="preview">
+            <p id="fileName">No file chosen</p>
+            <button class="button" onclick="openFile()">Preview File</button>
+        </div>
+
+        <button class="button" onclick="uploadFile()">Upload</button>
+        <button class="button" onclick="goBack()">Back to Dashboard</button>
+    </div>
+
+    <script>
+        let uploadedFile;
+
+        function previewFile() {
+            let fileInput = document.getElementById('fileUpload');
+            let fileName = document.getElementById('fileName');
+            let preview = document.getElementById('preview');
+
+            if (fileInput.files.length > 0) {
+                uploadedFile = fileInput.files[0];
+                fileName.innerText = uploadedFile.name;
+                preview.style.display = 'block';
+            }
+        }
+
+        function openFile() {
+            if (uploadedFile) {
+                let fileURL = URL.createObjectURL(uploadedFile);
+                window.open(fileURL, '_blank');
+            }
+        }
+
+        function uploadFile() {
+            if (uploadedFile) {
+                alert('File Uploaded Successfully: ' + uploadedFile.name);
+            } else {
+                alert('Please select a file first.');
+            }
+        }
+
+        function goBack() {
+            window.location.href = "teacher.html";
+        }
+    </script>
+
+</body>
+</html>
