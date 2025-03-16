@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
 
@@ -19,183 +19,178 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             background: linear-gradient(45deg, #0c60b3, 60%, #192b8f);
+            overflow: hidden;
         }
 
         .container {
-            width: 400px;
-            background: #f3f3f3;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
             text-align: center;
         }
 
         h2 {
-            color: #333;
-            font-size: 28px;
+            color: #fff;
+            font-size: 24px;
             margin-bottom: 15px;
-        }
-
-        .input-box {
-            width: 90%;
-            margin: 10px 0;
-        }
-
-        .input-box input {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-bottom: 2px solid rgba(0, 0, 0, .5);
-            outline: none;
-            background: transparent;
-            font-size: 15px;
+            font-weight: 600;
         }
 
         .btn {
-            width: 90%;
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
             border-radius: 50px;
             border: none;
             background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
             color: #fff;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: 500;
             cursor: pointer;
             transition: background 0.3s ease;
-            margin: 10px 0;
+            margin-top: 10px;
         }
 
         .btn:hover {
             background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
         }
 
-        .Form {
+        .form-container {
             display: none;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
 
-        .forgot-section {
+        input {
+            width: 100%;
+            padding: 10px;
             margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
         }
 
-        .returnBtn {
-            color: #007bff;
+        .back-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .returnBtn:hover {
+            margin-top: 15px;
             text-decoration: underline;
         }
 
-        .select-login {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* Success Popup */
+        .popup {
+            position: fixed;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: all 0.5s ease;
         }
 
-        @media (max-width: 480px) {
-            .container {
-                width: 300px;
-            }
+        .popup.show {
+            top: 20px;
+            opacity: 1;
         }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Login As Page -->
-        <div class="Form select-login">
-            <h2>Login As</h2>
-            <button class="btn" onclick="showForm('student')">Student</button>
-            <button class="btn" onclick="showForm('teacher')">Teacher</button>
-            <button class="btn" onclick="comingSoon()">Parent</button>
-        </div>
+    <div class="popup" id="successPopup"></div>
 
-        <!-- Student Login -->
-        <div class="Form login-form" id="student-form">
-            <h2>Student Login</h2>
-            <form action="http://127.0.0.1:5000/login" method="POST">
-                <div class="input-box">
-                    <i class='bx bxs-user'></i>
-                    <input type="text" name="username" placeholder="Enter Your Username*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-lock-alt'></i>
-                    <input type="password" name="password" placeholder="Enter Your Password*" required>
-                </div>
-                <div class="forgot-section">
-                    <span><input type="checkbox"> Remember Me</span>
-                </div>
-                <button class="btn">Login</button>
-                <p class="returnBtn" onclick="showForm('main')">Return</p>
-            </form>
-        </div>
+    <div class="container" id="selectionScreen">
+        <h2>Login As</h2>
+        <button class="btn" onclick="showForm('student')">Student</button>
+        <button class="btn" onclick="showForm('teacher')">Teacher</button>
+        <button class="btn" onclick="showParentMessage()">Parent</button>
+    </div>
 
-        <!-- Teacher Login -->
-        <div class="Form login-form" id="teacher-form">
-            <h2>Teacher Login</h2>
-            <form action="#">
-                <div class="input-box">
-                    <i class='bx bxs-user'></i>
-                    <input type="text" placeholder="Enter Your Username*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-lock-alt'></i>
-                    <input type="password" placeholder="Enter Your Password*" required>
-                </div>
-                <button class="btn">Login</button>
-                <button class="btn small-btn" onclick="showForm('teacher-register')">Register as Teacher</button>
-                <p class="returnBtn" onclick="showForm('main')">Return</p>
-            </form>
-        </div>
+    <!-- Student / Teacher Login Form -->
+    <div class="container form-container" id="loginForm">
+        <h2 id="formTitle">Login</h2>
+        
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
 
-        <!-- Teacher Registration -->
-        <div class="Form register-form" id="teacher-register-form">
-            <h2>Teacher Registration</h2>
-            <form action="#">
-                <div class="input-box">
-                    <i class='bx bxs-user'></i>
-                    <input type="text" placeholder="Enter Your Name*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-envelope'></i>
-                    <input type="email" placeholder="Enter Your Email*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-lock-alt'></i>
-                    <input type="password" placeholder="Enter Your Password*" required>
-                </div>
-                <button class="btn">Register</button>
-                <p class="returnBtn" onclick="showForm('teacher')">Return</p>
-            </form>
-        </div>
+        <button class="btn" onclick="submitForm()">Login</button>
+        
+        <button class="back-btn" onclick="goBack()">Back</button>
+    </div>
 
+    <!-- Teacher Registration Form -->
+    <div class="container form-container" id="registerForm">
+        <h2>Register as Teacher</h2>
+
+        <input type="text" placeholder="Full Name">
+        <input type="email" placeholder="Email">
+        <input type="password" placeholder="Password">
+
+        <button class="btn" onclick="register()">Register</button>
+
+        <button class="back-btn" onclick="goBack()">Back</button>
     </div>
 
     <script>
-        function showForm(form) {
-            let forms = document.querySelectorAll(".Form");
-            forms.forEach(f => f.style.display = "none");
+        function showForm(role) {
+            document.getElementById("selectionScreen").style.display = "none";
+            document.getElementById("loginForm").style.display = "flex";
+            document.getElementById("formTitle").innerText = "Login as " + role.charAt(0).toUpperCase() + role.slice(1);
 
-            if (form === "main") {
-                document.querySelector(".select-login").style.display = "flex";
+            // Show Register button only for Teacher
+            if (role === "teacher") {
+                document.getElementById("registerForm").style.display = "flex";
             } else {
-                document.getElementById(form + "-form").style.display = "flex";
+                document.getElementById("registerForm").style.display = "none";
             }
         }
 
-        function comingSoon() {
-            alert("Feature Coming Soon");
+        function showParentMessage() {
+            alert("Feature Coming Soon!");
         }
 
-        // Show the initial "Login As" page
-        showForm("main");
+        function goBack() {
+            document.getElementById("selectionScreen").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("registerForm").style.display = "none";
+        }
+
+        function submitForm() {
+            showPopup("Login Successful!");
+            setTimeout(() => {
+                window.location.href = "dashboard.html"; // Redirect to dashboard
+            }, 2000);
+        }
+
+        function register() {
+            showPopup("Registration Successful!");
+            setTimeout(goBack, 2000); // Return to login screen after showing success message
+        }
+
+        function showPopup(message) {
+            let popup = document.getElementById("successPopup");
+            popup.innerText = message;
+            popup.classList.add("show");
+
+            setTimeout(() => {
+                popup.classList.remove("show");
+            }, 2000);
+        }
     </script>
 
 </body>
