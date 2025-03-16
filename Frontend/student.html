@@ -39,44 +39,48 @@
             color: #fff;
             font-size: 28px;
             margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .feature-box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
             background: rgba(255, 255, 255, 0.2);
             padding: 15px;
             margin: 10px 0;
             border-radius: 10px;
             color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 500;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
 
         .feature-box i {
             font-size: 24px;
-            margin-right: 10px;
+            margin-right: 12px;
         }
 
         .feature-box:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
-        button {
+        .logout-btn {
             width: 100%;
-            padding: 10px;
-            border: none;
+            padding: 12px;
             border-radius: 50px;
+            border: none;
+            background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
+            color: #fff;
             font-size: 18px;
             font-weight: 500;
-            color: #fff;
-            background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
             cursor: pointer;
-            transition: 0.3s ease;
-            margin-top: 10px;
+            transition: background 0.3s ease;
+            margin-top: 15px;
         }
 
-        button:hover {
+        .logout-btn:hover {
             background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
         }
 
@@ -87,31 +91,30 @@
     <div class="container">
         <h2>Student Dashboard</h2>
         
-        <div class="feature-box" onclick="window.location.href='/feedback'">
+        <div class="feature-box" onclick="window.location.href='feedback.html'">
             <i class='bx bxs-message-rounded-dots'></i>
             <span>Student - AI - Teacher Feedback System</span>
         </div>
 
-        <button onclick="window.location.href='/logout'">Logout</button>
+        <div class="feature-box" onclick="window.location.href='pop_quiz.html'">
+            <i class='bx bxs-book-open'></i>
+            <span>Student POP Quiz Assistance</span>
+        </div>
+
+        <div class="feature-box" onclick="window.location.href='notes_arrangement.html'">
+            <i class='bx bxs-file'></i>
+            <span>Notes Arrangement</span>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 
-
     <script>
-        function openFeature(feature) {
-            if (feature === 'feedback') {
-                window.location.href = "feedback.html";  // Redirect to Feedback Page
-            } else {
-                alert("Feature Coming Soon: " + feature);
-            }
-        }
-
         function logout() {
             alert("Logging out...");
-            window.location.href = "login.html";
-
+            window.location.href = "login.html";  // Redirect to Login Page
         }
     </script>
-
 
 </body>
 </html>
