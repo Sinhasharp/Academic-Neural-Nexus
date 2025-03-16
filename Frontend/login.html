@@ -81,6 +81,13 @@
 
         .forgot-section {
             margin-top: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .forgot-section:hover {
+            text-decoration: underline;
         }
 
         .returnBtn {
@@ -120,7 +127,7 @@
         <!-- Student Login -->
         <div class="Form login-form" id="student-form">
             <h2>Student Login</h2>
-            <form action="http://127.0.0.1:5000/login" method="POST">
+            <form action="/login" method="POST">
                 <div class="input-box">
                     <i class='bx bxs-user'></i>
                     <input type="text" name="username" placeholder="Enter Your Username*" required>
@@ -129,9 +136,7 @@
                     <i class='bx bxs-lock-alt'></i>
                     <input type="password" name="password" placeholder="Enter Your Password*" required>
                 </div>
-                <div class="forgot-section">
-                    <span><input type="checkbox"> Remember Me</span>
-                </div>
+                <div class="forgot-section">Forgot Password?</div>
                 <button class="btn">Login</button>
                 <p class="returnBtn" onclick="showForm('main')">Return</p>
             </form>
@@ -140,17 +145,18 @@
         <!-- Teacher Login -->
         <div class="Form login-form" id="teacher-form">
             <h2>Teacher Login</h2>
-            <form action="#">
+            <form action="/login" method="POST">
                 <div class="input-box">
                     <i class='bx bxs-user'></i>
-                    <input type="text" placeholder="Enter Your Username*" required>
+                    <input type="text" name="username" placeholder="Enter Your Username*" required>
                 </div>
                 <div class="input-box">
                     <i class='bx bxs-lock-alt'></i>
-                    <input type="password" placeholder="Enter Your Password*" required>
+                    <input type="password" name="password" placeholder="Enter Your Password*" required>
                 </div>
+                <div class="forgot-section">Forgot Password?</div>
                 <button class="btn">Login</button>
-                <button class="btn small-btn" onclick="showForm('teacher-register')">Register as Teacher</button>
+                <button type="button" class="btn small-btn" onclick="showForm('teacher-register')">Register as Teacher</button>
                 <p class="returnBtn" onclick="showForm('main')">Return</p>
             </form>
         </div>
@@ -158,18 +164,18 @@
         <!-- Teacher Registration -->
         <div class="Form register-form" id="teacher-register-form">
             <h2>Teacher Registration</h2>
-            <form action="#">
+            <form action="/teacher_register" method="POST">
                 <div class="input-box">
                     <i class='bx bxs-user'></i>
-                    <input type="text" placeholder="Enter Your Name*" required>
+                    <input type="text" name="name" placeholder="Enter Your Name*" required>
                 </div>
                 <div class="input-box">
                     <i class='bx bxs-envelope'></i>
-                    <input type="email" placeholder="Enter Your Email*" required>
+                    <input type="email" name="email" placeholder="Enter Your Email*" required>
                 </div>
                 <div class="input-box">
                     <i class='bx bxs-lock-alt'></i>
-                    <input type="password" placeholder="Enter Your Password*" required>
+                    <input type="password" name="password" placeholder="Enter Your Password*" required>
                 </div>
                 <button class="btn">Register</button>
                 <p class="returnBtn" onclick="showForm('teacher')">Return</p>
