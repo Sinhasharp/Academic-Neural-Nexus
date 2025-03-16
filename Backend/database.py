@@ -1,4 +1,5 @@
 import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash  # For hashing passwords
 
 DB_NAME = "classroom.db"
 
@@ -7,8 +8,8 @@ def init_db():
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
-    # Create the users table (for login system)
-    cursor.execute('''
+    # Create the users table (for student login system)
+    cursor.execute(''' 
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
@@ -16,8 +17,18 @@ def init_db():
         )
     ''')
 
+    # Create the teachers table (for teacher login & registration)
+    cursor.execute(''' 
+        CREATE TABLE IF NOT EXISTS teachers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    ''')
+
     # Create the feedback table (for student feedback)
-    cursor.execute('''
+    cursor.execute(''' 
         CREATE TABLE IF NOT EXISTS feedback (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             sender TEXT NOT NULL,
@@ -30,11 +41,13 @@ def init_db():
         ("Harshil", "Harshil28"),
         ("Sarbojit", "Sarbojit62"),
         ("Suchi", "Suchi64"),
-        ("Vaibhav", "Vaibhav92")  # Fixed Vaibhav's password
+        ("Vaibhav", "Vaibhav93")  # ✅ Updated Vaibhav's password
     ]
 
     for user in users:
-        cursor.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", user)
+        # Hashing the passwords before storing them in the database
+        hashed_password = generate_password_hash(user[1])
+        cursor.execute("INSERT OR REPLACE INTO users (username, password) VALUES (?, ?)", (user[0], hashed_password))
 
     conn.commit()
     conn.close()
@@ -66,20 +79,60 @@ def get_feedback_history():
     
     return history
 
-# Validate login credentials
+# Validate student login credentials
 def validate_login(username, password):
     try:
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = cursor.fetchone()
     except Exception as e:
         print("Login validation error:", e)
         user = None
     finally:
         conn.close()
-    
-    return user is not None  # Returns True if user exists, False otherwise
+
+    if user and check_password_hash(user[2], password):  # Compare hashed password
+        return True
+    return False
+
+# Register a new teacher (with hashed password)
+def teacher_register(username, email, password):
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+
+        # Hash the password before storing it in the database
+        hashed_password = generate_password_hash(password)
+
+        cursor.execute("INSERT INTO teachers (username, email, password) VALUES (?, ?, ?)", (username, email, hashed_password))
+        conn.commit()
+        return True  # Registration successful
+    except sqlite3.IntegrityError:
+        print("Error: Username or Email already exists.")
+        return False  # Registration failed (duplicate username/email)
+    except Exception as e:
+        print("Error registering teacher:", e)
+        return False
+    finally:
+        conn.close()
+
+# Validate teacher login credentials
+def validate_teacher_login(username, password):
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM teachers WHERE username = ?", (username,))
+        teacher = cursor.fetchone()
+    except Exception as e:
+        print("Teacher login validation error:", e)
+        teacher = None
+    finally:
+        conn.close()
+
+    if teacher and check_password_hash(teacher[3], password):  # Compare hashed password
+        return True
+    return False
 
 # Function to clear feedback history (for testing/reset)
 def clear_feedback_history():
