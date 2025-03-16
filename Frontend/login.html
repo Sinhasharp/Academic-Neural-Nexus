@@ -108,12 +108,23 @@
             opacity: 1;
         }
 
+        .register-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="popup" id="successPopup"></div>
 
+    <!-- Login Selection Screen -->
     <div class="container" id="selectionScreen">
         <h2>Login As</h2>
         <button class="btn" onclick="showForm('student')">Student</button>
@@ -129,7 +140,10 @@
         <input type="password" id="password" placeholder="Password">
 
         <button class="btn" onclick="submitForm()">Login</button>
-        
+
+        <!-- Register button for Teacher -->
+        <button class="register-btn" id="registerBtn" onclick="showRegister()">Register as Teacher</button>
+
         <button class="back-btn" onclick="goBack()">Back</button>
     </div>
 
@@ -152,12 +166,13 @@
             document.getElementById("loginForm").style.display = "flex";
             document.getElementById("formTitle").innerText = "Login as " + role.charAt(0).toUpperCase() + role.slice(1);
 
-            // Show Register button only for Teacher
-            if (role === "teacher") {
-                document.getElementById("registerForm").style.display = "flex";
-            } else {
-                document.getElementById("registerForm").style.display = "none";
-            }
+            // Show "Register as Teacher" button only if it's a teacher
+            document.getElementById("registerBtn").style.display = role === "teacher" ? "block" : "none";
+        }
+
+        function showRegister() {
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("registerForm").style.display = "flex";
         }
 
         function showParentMessage() {
