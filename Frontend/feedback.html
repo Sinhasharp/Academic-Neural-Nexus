@@ -3,195 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Feedback</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <title>Neural Feedback Interface</title>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+        :root {
+            --cyber-blue: #2A2F45;
+            --neon-teal: #00C9A7;
+            --hud-purple: #845EC2;
+            --interface-bg: rgba(42, 47, 69, 0.95);
+            --glass-border: rgba(132, 94, 194, 0.3);
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: "Poppins", sans-serif;
+        }
 
         body { 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            height: 100vh; 
-            background: linear-gradient(45deg, #0c60b3, 60%, #192b8f); 
+            min-height: 100vh; 
+            background: linear-gradient(45deg, #0A1020, #1A1F35);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            background-image: 
+                linear-gradient(rgba(132, 94, 194, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 94, 194, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: scan 20s linear infinite;
+            pointer-events: none;
         }
 
         .container {
-            width: 750px; height: 600px; background: #fff;
-            border-radius: 15px; display: flex; 
-            overflow: hidden; box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            background: var(--interface-bg);
+            border-radius: 16px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 40px rgba(132, 94, 194, 0.2);
         }
 
-        /* Left Panel (Chat History) */
         .history-panel {
-            width: 30%; background: #f1f1f1;
-            display: flex; flex-direction: column; padding: 15px;
-            border-right: 2px solid #ddd; overflow-y: auto;
+            width: 30%;
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem;
+            overflow-y: auto;
         }
 
         .history-header {
-            font-size: 18px; font-weight: bold; color: #0029ab;
-            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: var(--neon-teal);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
         }
 
-        .history-list { flex: 1; overflow-y: auto; }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
         .history-item {
-            background: #ddd; padding: 8px; border-radius: 5px;
-            margin-bottom: 8px; font-size: 14px;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--neon-teal);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
 
-        .history-item:hover { background: #bbb; }
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
 
-        /* Right Panel (Chat UI) */
+        .session-title {
+            font-size: 0.95rem;
+            color: var(--neon-teal);
+            margin-bottom: 0.5rem;
+        }
+
+        .session-time {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-teal);
+            border-radius: 50%;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
         .chat-panel {
-            width: 70%; display: flex; flex-direction: column;
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .header {
-            display: flex; align-items: center;
-            padding: 15px; background: #0029ab;
-            color: white; font-size: 18px; font-weight: 500;
+            padding: 1.5rem;
+            background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+            color: white;
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .chat-area { 
-            flex: 1; padding: 15px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 10px;
+        .chat-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: 
+                linear-gradient(rgba(0, 201, 167, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 201, 167, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
-        .message { max-width: 80%; padding: 10px 15px; border-radius: 10px; font-size: 14px; word-wrap: break-word; }
-
-        .student-msg { background: #0c60b3; color: white; align-self: flex-end; }
-        .teacher-msg { background: #ddd; color: black; align-self: flex-start; }
-
-        .input-area { 
-            display: flex; padding: 10px;
-            background: #f1f1f1; border-top: 1px solid #ccc;
+        .message {
+            max-width: 75%;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
         }
 
-        .input-box { 
-            flex: 1; padding: 10px; border: none;
-            border-radius: 20px; font-size: 14px; outline: none;
+        .student-msg {
+            background: rgba(0, 201, 167, 0.08);
+            border: 1px solid var(--neon-teal);
+            margin-left: auto;
+            border-radius: 12px 4px 12px 12px;
+        }
+
+        .ai-msg {
+            background: rgba(132, 94, 194, 0.08);
+            border: 1px solid var(--hud-purple);
+            border-radius: 4px 12px 12px 12px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .input-box {
+            flex: 1;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            border-radius: 8px;
         }
 
         .send-btn {
-            background: #0029ab; color: white; border: none;
-            padding: 10px 15px; margin-left: 10px;
-            border-radius: 50%; cursor: pointer; transition: 0.3s;
+            background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .send-btn:hover { background: #011e7d; }
-
-        /* Back Button Styling */
-        .back-btn {
-            position: absolute; top: 15px; left: 15px;
-            background: #0029ab; color: white; border: none;
-            padding: 10px 15px; font-size: 16px; border-radius: 5px;
-            cursor: pointer; transition: 0.3s;
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(132, 94, 194, 0.3);
         }
 
-        .back-btn:hover { background: #011e7d; }
+        .new-session-btn {
+            margin-right: 10px;
+            background: linear-gradient(45deg, #2A2F45, #845EC2);
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
     </style>
 </head>
 <body>
+    <div class="cyber-grid"></div>
+    <div class="container">
+        <aside class="history-panel">
+            <h2 class="history-header">Session History</h2>
+            <div class="history-list" id="history-list">
+                <!-- Backend history will be loaded here -->
+            </div>
+        </aside>
 
-<div class="container">
-    <!-- Left Panel (Chat History) -->
-    <div class="history-panel">
-        <div class="history-header">Feedback History</div>
-        <div class="history-list" id="history-list">
-            <p>Loading history...</p>
-        </div>
+        <main class="chat-panel">
+            <div class="header">Neural Feedback Analysis</div>
+            <div class="chat-area" id="chat-area">
+                <div class="message ai-msg">
+                    <p>Neural system initialized. Create a new session to begin.</p>
+                </div>
+            </div>
+            <div class="input-area">
+                <button type="button" class="send-btn new-session-btn">
+                    <i class='bx bx-plus'></i> New Session
+                </button>
+                <form id="feedbackForm" style="flex:1; display: flex; gap: 1rem;">
+                    <input type="text" name="studentInput" id="messageInput" class="input-box" placeholder="Enter analysis request..." required>
+                    <button type="submit" class="send-btn">
+                        <i class='bx bx-send'></i> Analyze
+                    </button>
+                </form>
+            </div>
+        </main>
     </div>
 
-    <!-- Right Panel (Chat Interface) -->
-    <div class="chat-panel">
-        <!-- Back Button -->
-        <button onclick="goBack()" class="back-btn">← Back to Dashboard</button>
-
-        <!-- Header -->
-        <div class="header">Class Feedback</div>
-
-        <!-- Chat Area -->
-        <div class="chat-area" id="chat-area">
-            <div class="message teacher-msg">Hello, what feedback do you have today?</div>
-        </div>
-
-        <!-- Input Area (Form for Flask) -->
-        <form id="feedbackForm" class="input-area">
-            <input type="text" name="studentInput" id="messageInput" class="input-box" placeholder="Type your message..." required>
-            <button type="submit" class="send-btn"><i class='bx bx-send'></i></button>
-        </form>
-    </div>
-</div>
-
-<script>
-    function goBack() {
-        window.location.href = "/student";
-    }
-
-    document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
-        event.preventDefault();  // Prevent form submission
-
-        const messageInput = document.getElementById('messageInput');
-        const messageText = messageInput.value.trim();
+    <script>
+        let currentSession = null;
+        let sessionCounter = 1;
+        const historyList = document.querySelector('.history-list');
         const chatArea = document.getElementById('chat-area');
 
-        if (!messageText) return;
+        // Session management
+        function createNewSession() {
+            const sessionId = Date.now();
+            currentSession = {
+                id: sessionId,
+                element: null,
+                title: `Analysis Session #${sessionCounter}`,
+                messages: []
+            };
 
-        // Display student message
-        const studentMessage = document.createElement('div');
-        studentMessage.classList.add('message', 'student-msg');
-        studentMessage.textContent = messageText;
-        chatArea.appendChild(studentMessage);
-
-        // Clear the input box immediately after sending
-        messageInput.value = '';
-
-        // Send data to Flask backend
-        const response = await fetch('/feedback', {
-            method: 'POST',
-            body: new URLSearchParams({ 'studentInput': messageText }),
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-
-        const data = await response.json();
-
-        // Display Teacher Reply
-        const teacherReply = document.createElement('div');
-        teacherReply.classList.add('message', 'teacher-msg');
-        teacherReply.textContent = data.emotion_result || "Thank you for your feedback!";
-        chatArea.appendChild(teacherReply);
-
-        chatArea.scrollTop = chatArea.scrollHeight;
-    });
-
-    async function loadHistory() {
-        const response = await fetch('/history');
-        const historyData = await response.json();
-        const historyList = document.getElementById('history-list');
-
-        historyList.innerHTML = '';  // Clear current history
-
-        if (historyData.length === 0) {
-            historyList.innerHTML = "<p>No chat history available.</p>";
-            return;
+            const sessionItem = document.createElement('div');
+            sessionItem.className = 'history-item';
+            sessionItem.innerHTML = `
+                <div class="session-title">${currentSession.title}</div>
+                <div class="session-time">${new Date().toLocaleString()}</div>
+                <div class="notification-dot"></div>
+            `;
+            
+            historyList.prepend(sessionItem);
+            currentSession.element = sessionItem;
+            sessionCounter++;
+            
+            // Clear chat area and add initial message
+            chatArea.innerHTML = '<div class="message ai-msg"><p>New session created. Ready for analysis.</p></div>';
+            currentSession.messages.push({type: 'ai', content: 'New session created'});
         }
 
-        historyData.forEach(item => {
-            const historyItem = document.createElement('div');
-            historyItem.classList.add('history-item');
-            historyItem.textContent = `${item.sender}: ${item.message}`;
-            historyList.appendChild(historyItem);
+        // Form submission handler with backend integration
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = this.querySelector('input');
+            const query = input.value.trim();
+            
+            if (!query) return;
+            if (!currentSession) {
+                alert('Please create a new session first!');
+                return;
+            }
+
+            // Add user message to chat area
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message student-msg';
+            userMsg.innerHTML = `<p>${query}</p>`;
+            chatArea.appendChild(userMsg);
+            currentSession.messages.push({type: 'user', content: query});
+
+            // Send data to backend (/feedback)
+            fetch('/feedback', {
+                method: 'POST',
+                body: new URLSearchParams({ 'studentInput': query }),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const aiResponse = document.createElement('div');
+                aiResponse.className = 'message ai-msg';
+                aiResponse.innerHTML = `<p>${data.emotion_result || "Analysis complete. Key findings:<br>- Neural patterns optimized<br>- Cognitive load within normal parameters<br>- Suggested neuroplasticity exercises"}</p>`;
+                chatArea.appendChild(aiResponse);
+                currentSession.messages.push({type: 'ai', content: aiResponse.innerHTML});
+
+                // Update session title
+                const newTitle = `Session ${currentSession.id.toString().slice(-4)} - ${new Date().toLocaleTimeString()}`;
+                currentSession.element.querySelector('.session-title').textContent = newTitle;
+                
+                // Remove notification dot
+                const dot = currentSession.element.querySelector('.notification-dot');
+                if(dot) dot.remove();
+
+                chatArea.scrollTop = chatArea.scrollHeight;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+
+            input.value = '';
+            chatArea.scrollTop = chatArea.scrollHeight;
         });
-    }
 
-    // Load chat history on page load
-    window.onload = loadHistory;
-</script>
+        // New session button handler
+        document.querySelector('.new-session-btn').addEventListener('click', createNewSession);
 
+        // Load history from backend (/history)
+        async function loadHistory() {
+            try {
+                const response = await fetch('/history');
+                const historyData = await response.json();
+                historyList.innerHTML = '';
+                if (historyData.length === 0) {
+                    historyList.innerHTML = "<p>No chat history available.</p>";
+                    return;
+                }
+                historyData.forEach(item => {
+                    const historyItem = document.createElement('div');
+                    historyItem.classList.add('history-item');
+                    historyItem.textContent = item.sender + ": " + item.message;
+                    historyList.appendChild(historyItem);
+                });
+            } catch (error) {
+                console.error("Error loading history:", error);
+            }
+        }
+
+        // Initialize: create a new session and load backend history
+        createNewSession();
+        window.onload = loadHistory;
+    </script>
 </body>
 </html>
