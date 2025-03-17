@@ -164,6 +164,58 @@
             transition: width 0.3s ease;
         }
 
+        .password-requirement {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        /* New wrapper for proper icon alignment */
+        .input-wrapper {
+            position: relative;
+        }
+
+        /* Adjusted icon positioning */
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-teal);
+            font-size: 1.2rem;
+        }
+
+        /* Ensure input padding matches icon position */
+        .input-wrapper input {
+            padding-left: 3rem !important;
+            width: 100%;
+        }
+
+        .test-instruction {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+            
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-teal);
+            font-size: 1.2rem;
+        }
+
+        .input-wrapper input {
+            padding-left: 3rem !important;
+            width: 100%;
+        }
+
         @keyframes scan {
             0% { transform: translateY(0); }
             100% { transform: translateY(-50%); }
@@ -218,12 +270,18 @@
         <h2>Student Login</h2>
         <form action="/login" method="POST">
             <div class="input-box">
-                <i class='bx bxs-user'></i>
-                <input type="text" name="username" placeholder="Academic ID" required>
+                <div class="test-instruction">*Testing username - "GDG"</div>
+                <div class="input-wrapper">
+                    <i class='bx bxs-user'></i>
+                    <input type="text" name="username" placeholder="Academic ID" required>
+                </div>
             </div>
             <div class="input-box">
-                <i class='bx bxs-lock-alt'></i>
-                <input type="password" name="password" placeholder="Secure Passkey" required>
+                <div class="test-instruction">*Testing password - "GDG2025"</div>
+                <div class="input-wrapper">
+                    <i class='bx bxs-lock-alt'></i>
+                    <input type="password" name="password" placeholder="Secure Passkey" required>
+                </div>
             </div>
             <button type="submit" class="btn">Authenticate</button>
         </form>
@@ -252,31 +310,34 @@
         </div>
     </div>
 
-    <!-- Teacher Registration -->
-    <div class="container login-form" id="teacher-register-form">
-        <h2>Faculty Enrollment</h2>
-        <form action="/teacher_register" method="POST">
-            <div class="input-box">
-                <i class='bx bxs-user-detail'></i>
-                <input type="text" name="name" placeholder="Full Name" required>
-            </div>
-            <div class="input-box">
-                <i class='bx bxs-envelope'></i>
-                <input type="email" name="email" placeholder="Institutional Email" required>
-            </div>
-            <div class="input-box">
+<!-- Teacher Registration -->
+<div class="container login-form" id="teacher-register-form">
+    <h2>Faculty Enrollment</h2>
+    <form action="/teacher_register" method="POST">
+        <div class="input-box">
+            <i class='bx bxs-user-detail'></i>
+            <input type="text" name="name" placeholder="Full Name" required>
+        </div>
+        <div class="input-box">
+            <i class='bx bxs-envelope'></i>
+            <input type="email" name="email" placeholder="Institutional Email" required>
+        </div>
+        <div class="input-box">
+            <div class="input-wrapper">
                 <i class='bx bxs-shield'></i>
                 <input type="password" name="password" placeholder="Create Secure Key" required id="regPassword">
-                <div class="password-strength">
-                    <div class="strength-bar" id="strengthBar"></div>
-                </div>
             </div>
-            <button type="submit" class="btn">Enroll Credentials</button>
-        </form>
-        <div class="form-footer">
-            <p class="form-link" onclick="showForm('teacher')">Existing Faculty?</p>
+            <div class="password-strength">
+                <div class="strength-bar" id="strengthBar"></div>
+            </div>
+            <div class="password-requirement">*Password must be minimum 5 characters with a number</div>
         </div>
+        <button type="submit" class="btn">Enroll Credentials</button>
+    </form>
+    <div class="form-footer">
+        <p class="form-link" onclick="showForm('teacher')">Existing Faculty?</p>
     </div>
+</div>
 
     <!-- Coming Soon Modal -->
     <div class="modal" id="comingSoon">
