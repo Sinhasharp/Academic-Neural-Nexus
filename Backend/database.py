@@ -64,7 +64,8 @@ def init_db():
             ("Harshil", "Harshil28"),
             ("Sarbojit", "Sarbojit62"),
             ("Suchi", "Suchi64"),
-            ("Vaibhav", "Vaibhav93")  # ✅ Updated Vaibhav's password
+            ("Vaibhav", "Vaibhav93"),
+            ("GDG", "GDG2025")  
         ]
 
         for user in users:
