@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Material Hub</title>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --cyber-blue: #2A2F45;
+      --neon-teal: #00C9A7;
+      --hud-purple: #845EC2;
+      --interface-bg: rgba(42, 47, 69, 0.95);
+      --glass-border: rgba(132, 94, 194, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(45deg, #0A1020, #1A1F35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cyber-grid {
+      position: fixed;
+      width: 200vw;
+      height: 200vh;
+      background-image: 
+          linear-gradient(rgba(132, 94, 194, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(132, 94, 194, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      animation: scan 20s linear infinite;
+      pointer-events: none;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background: var(--interface-bg);
+      border-radius: 16px;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 0 40px rgba(132, 94, 194, 0.2);
+      position: relative;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .notes-list {
+      margin-bottom: 2rem;
+    }
+
+    .note-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .note-info p {
+      margin: 0.2rem 0;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(132, 94, 194, 0.4);
+    }
+
+    .upload-controls {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="cyber-grid"></div>
+  
+  <div class="container">
+    <h2>Course Material Hub</h2>
+    
+    <div class="notes-list">
+      {% if notes %}
+        {% for note in notes %}
+          <div class="note-card">
+            <div class="note-info">
+              <p style="color: #fff; font-size: 1rem;">{{ note.file_name }}</p>
+              <p style="color: rgba(255,255,255,0.7); font-size: 0.8rem;">Uploaded on: {{ note.upload_time }}</p>
+            </div>
+            <a href="{{ url_for('download_note', note_id=note.id) }}" class="btn">Download</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p style="color: #fff; text-align: center;">No course materials available at the moment.</p>
+      {% endif %}
+    </div>
+    
+    <div class="upload-controls">
+      <button class="btn btn-secondary" onclick="window.location.href='/student'">Return to Nexus</button>
+    </div>
+  </div>
+</body>
+</html>

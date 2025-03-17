@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Home Page</title>
+    <title>Neural Student Hub</title>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+        :root {
+            --cyber-blue: #2A2F45;
+            --neon-teal: #00C9A7;
+            --hud-purple: #845EC2;
+            --interface-bg: rgba(42, 47, 69, 0.95);
+            --glass-border: rgba(132, 94, 194, 0.3);
+        }
 
         * {
             margin: 0;
@@ -19,99 +26,617 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: linear-gradient(45deg, #0c60b3, 60%, #192b8f);
-            overflow: hidden;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #0A1020, #1A1F35);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            background-image: 
+                linear-gradient(rgba(132, 94, 194, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 94, 194, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: scan 20s linear infinite;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .container {
             width: 90%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            text-align: center;
+            max-width: 1200px;
+            background: var(--interface-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 40px rgba(132, 94, 194, 0.2);
+            margin: 2rem 0;
+            position: relative;
+            z-index: 2;
         }
 
         h2 {
             color: #fff;
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        .feature-box {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            color: #fff;
+        .analytics-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            min-height: 200px;
+            position: relative;
+        }
+
+        .metric-card h3 {
+            color: var(--neon-teal);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .chart-container {
+            height: 150px;
+            width: 100%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            margin: 1rem 0;
+            transition: color 0.5s ease;
+        }
+
+        /* Popout Modal Styles */
+        .chart-popout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 16, 32, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .chart-popout.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popout-content {
+            width: 90%;
+            max-width: 800px;
+            background: var(--interface-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            position: relative;
+            border: 1px solid var(--glass-border);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: var(--neon-teal);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 150px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-teal);
+            box-shadow: 0 5px 20px rgba(0, 201, 167, 0.2);
+        }
+
+        .feature-content {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-
-        .feature-box i {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .feature-box:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 500;
+            gap: 1.5rem;
             color: #fff;
-            background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
+            height: 100%;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--neon-teal);
+            min-width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 201, 167, 0.1);
+        }
+
+        .feature-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: 0.3s ease;
-            margin-top: 10px;
+            transition: all 0.3s ease;
         }
 
-        button:hover {
-            background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(132, 94, 194, 0.4);
         }
 
+        .activity-feed {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 2rem;
+        }
+
+        .activity-feed h3 {
+            color: var(--neon-teal);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .activity-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--neon-teal);
+        }
+
+        .activity-item .feature-title {
+            color: var(--neon-teal) !important;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-item .feature-desc {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .activity-item .feature-desc span:first-child {
+            color: var(--hud-purple);
+            position: relative;
+            padding-right: 0.75rem;
+        }
+
+        .activity-item .feature-desc span:first-child::after {
+            content: "•";
+            position: absolute;
+            right: 0;
+            color: rgba(255,255,255,0.5);
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-teal);
+            box-shadow: 0 5px 20px rgba(0, 201, 167, 0.2);
+        }
+
+        .feature-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #fff;
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            color: var(--neon-teal);
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 201, 167, 0.1);
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-status {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--interface-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-content {
+                gap: 1rem;
+            }
+
+            .feature-icon {
+                min-width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-
+    <div class="cyber-grid"></div>
+    
     <div class="container">
-        <h2>Student Dashboard</h2>
+        <h2>Academic Neural Hub</h2>
         
-        <div class="feature-box" onclick="window.location.href='/feedback'">
-            <i class='bx bxs-message-rounded-dots'></i>
-            <span>Student - AI - Teacher Feedback System</span>
+        <div class="analytics-section">
+            <div class="metric-card">
+                <h3>CGPA</h3>
+                <div class="metric-value" data-value="{{ gpa }}" data-min="0" data-max="10">{{ gpa }}</div>
+            </div>
+            
+            <div class="metric-card">
+                <h3>SGPA</h3>
+                <div class="metric-value" data-value="{{ sgpa }}" data-min="0" data-max="10">{{ sgpa }}</div>
+                <div class="feature-desc">Current semester performance index</div>
+            </div>
+            
+            <div class="metric-card">
+                <h3>Attendance Rate</h3>
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
         </div>
 
-        <button onclick="window.location.href='/logout'">Logout</button>
+        <div class="dashboard-grid">
+            <div class="feature-card" onclick="window.location.href='/feedback'">
+                <div class="feature-content">
+                    <div class="feature-icon">
+                        <i class='bx bx-brain'></i>
+                    </div>
+                    <div class="feature-text">
+                        <div class="feature-title">AI Feedback Nexus</div>
+                        <div class="feature-desc">Real-time academic analysis with neural network processing</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" onclick="showFeatureModal('general')">
+                <div class="feature-content">
+                    <div class="feature-icon">
+                        <i class='bx bx-rocket'></i>
+                    </div>
+                    <div class="feature-text">
+                        <div class="feature-title">Quantum Quiz Engine</div>
+                        <div class="feature-desc">Adaptive learning assessments with performance analytics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='/notes_arrangement'">
+                <div class="feature-content">
+                    <div class="feature-icon">
+                        <i class='bx bx-network-chart'></i>
+                    </div>
+                    <div class="feature-text">
+                        <div class="feature-title">Cognitive Organizer</div>
+                        <div class="feature-desc">AI-powered knowledge mapping & note optimization</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="window.location.href='/login'">
+            <i class='bx bx-log-out'></i> Secure Session Termination
+        </button>
     </div>
 
+    <!-- Popout Modal -->
+    <div class="chart-popout">
+        <div class="popout-content">
+            <div class="close-btn"><i class='bx bx-x'></i></div>
+            <canvas id="popoutChart"></canvas>
+        </div>
+    </div>
 
     <script>
-        function openFeature(feature) {
-            if (feature === 'feedback') {
-                window.location.href = "feedback.html";  // Redirect to Feedback Page
-            } else {
-                alert("Feature Coming Soon: " + feature);
+        let attendanceChart = null;
+        let popoutChart = null;
+        // Set the attendance chart data based on the dynamic attendance value
+        const fullData = Array(12).fill({{ attendance }});
+        const initialMonths = ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'];
+        const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function calculateColor(value, min, max) {
+            const percentage = (value - min) / (max - min);
+            const hue = percentage * 120;
+            return `hsl(${hue}, 100%, 50%)`;
+        }
+
+        function updateMetricColors() {
+            document.querySelectorAll('.metric-value').forEach(element => {
+                const value = parseFloat(element.textContent);
+                const min = parseFloat(element.dataset.min);
+                const max = parseFloat(element.dataset.max);
+                element.style.color = calculateColor(value, min, max);
+            });
+        }
+
+        function createChart(ctx, labels, data) {
+            const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+            gradient.addColorStop(0, '#00C9A7');
+            gradient.addColorStop(1, '#845EC2');
+
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Attendance Rate',
+                        data: data,
+                        borderColor: gradient,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: false,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: gradient,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { 
+                                color: '#fff',
+                                stepSize: 20,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function showPopout() {
+            const popout = document.querySelector('.chart-popout');
+            const ctx = document.getElementById('popoutChart').getContext('2d');
+            
+            if(popoutChart) {
+                popoutChart.destroy();
+            }
+            
+            popoutChart = createChart(ctx, allMonths, fullData);
+            popout.classList.add('active');
+        }
+
+        function closePopout() {
+            document.querySelector('.chart-popout').classList.remove('active');
+            if(popoutChart) {
+                popoutChart.destroy();
             }
         }
 
-        function logout() {
-            alert("Logging out...");
-            window.location.href = "login.html";
-
+        function initializeChart() {
+            const ctx = document.getElementById('attendanceChart').getContext('2d');
+            attendanceChart = createChart(ctx, initialMonths, fullData.filter((_, i) => i % 2 === 0));
         }
+
+        function logout() {
+            const confirmation = confirm("Initiate secure session termination?");
+            if(confirmation) {
+                window.location.href = "login.html";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            initializeChart();
+            updateMetricColors();
+            
+            // Event Listeners
+            document.querySelector('.chart-container').addEventListener('click', showPopout);
+            document.querySelector('.close-btn').addEventListener('click', closePopout);
+            document.querySelector('.chart-popout').addEventListener('click', (e) => {
+                if(e.target === document.querySelector('.chart-popout')) {
+                    closePopout();
+                }
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if(attendanceChart) {
+                attendanceChart.destroy();
+                initializeChart();
+            }
+        });
     </script>
 
+    <!-- Feature Modal -->
+    <div class="modal" id="featureModal">
+        <h3 id="modalTitle" style="margin-bottom: 1rem;"></h3>
+        <p id="modalContent" style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;"></p>
+        <button class="btn" onclick="document.getElementById('featureModal').classList.remove('active')">
+            Acknowledge
+        </button>
+    </div>
 
+    <script>
+        function showFeatureModal(feature) {
+            const modal = document.getElementById('featureModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+            
+            const features = {
+                'security': {
+                    title: 'Security Protocols',
+                    content: 'This module is currently undergoing security enhancements. Expected completion: Q3 2024'
+                },
+                'user-management': {
+                    title: 'User Management',
+                    content: 'Advanced user controls are being integrated with biometric authentication systems'
+                },
+                'audit': {
+                    title: 'System Audit',
+                    content: 'Automated audit systems are being calibrated for enhanced compliance monitoring'
+                },
+                'general': {
+                    title: 'Work in Progress',
+                    content: 'This part is still in developement and will be implemented in the later versions of this program.'
+                }
+            };
+
+            title.textContent = features[feature].title;
+            content.textContent = features[feature].content;
+            modal.classList.add('active');
+        }
+    </script>
 </body>
 </html>
