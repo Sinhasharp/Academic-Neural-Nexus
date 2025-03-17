@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neural Document Hub</title>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --cyber-blue: #2A2F45;
+      --neon-teal: #00C9A7;
+      --hud-purple: #845EC2;
+      --interface-bg: rgba(42, 47, 69, 0.95);
+      --glass-border: rgba(132, 94, 194, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(45deg, #0A1020, #1A1F35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cyber-grid {
+      position: fixed;
+      width: 200vw;
+      height: 200vh;
+      background-image: 
+          linear-gradient(rgba(132, 94, 194, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(132, 94, 194, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      animation: scan 20s linear infinite;
+      pointer-events: none;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background: var(--interface-bg);
+      border-radius: 16px;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 0 40px rgba(132, 94, 194, 0.2);
+      position: relative;
+    }
+
+    h2 {
+      color: #fff;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .upload-section {
+      border: 2px dashed var(--glass-border);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .upload-section:hover {
+      border-color: var(--neon-teal);
+      background: rgba(0, 201, 167, 0.05);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      color: var(--neon-teal);
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .upload-label {
+      color: #fff;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .file-types {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .preview-box {
+      margin-top: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: none;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: #fff;
+    }
+
+    .file-icon {
+      font-size: 2rem;
+      color: var(--hud-purple);
+    }
+
+    .file-details {
+      flex: 1;
+    }
+
+    .file-progress {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: var(--neon-teal);
+      transition: width 0.3s ease;
+    }
+
+    .upload-controls {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(132, 94, 194, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--glass-border);
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    .security-status {
+      margin-top: 2rem;
+      color: var(--neon-teal);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .upload-animation {
+      display: none;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .upload-success {
+      display: none;
+      color: var(--neon-teal);
+      text-align: center;
+      font-size: 1.2rem;
+    }
+    
+    /* New File Preview Section */
+    .file-preview {
+      margin-top: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: none;
+    }
+    
+    .file-preview h3 {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    
+    .file-preview iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    
+    .file-preview pre {
+      white-space: pre-wrap;
+      background: #1A1F2D;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      .upload-controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cyber-grid"></div>
+  
+  <div class="container">
+    <h2>Academic Document Nexus</h2>
+    
+    <div class="upload-section" id="dropZone">
+      <i class='bx bx-cloud-upload upload-icon'></i>
+      <label class="upload-label" for="fileUpload">Drag & Drop or Browse Files</label>
+      <div class="file-types">Supported Formats: PDF, DOCX, TXT, MD (Max 100MB)</div>
+      
+      <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.txt,.md" onchange="handleFileSelect(event)">
+      
+      <div class="preview-box" id="previewBox">
+        <div class="file-info">
+          <i class='bx bx-file-blank file-icon'></i>
+          <div class="file-details">
+            <div id="fileName">No file selected</div>
+            <div id="fileSize" class="file-size">-</div>
+          </div>
+        </div>
+        <div class="file-progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-animation" id="uploadAnimation">
+      <i class='bx bx-loader-circle bx-spin' style="color: var(--neon-teal); font-size: 3rem;"></i>
+      <p>Encrypting & Analyzing Content...</p>
+    </div>
+
+    <div class="upload-success" id="uploadSuccess">
+      <i class='bx bx-check-circle' style="font-size: 3rem;"></i>
+      <p>Document Successfully Integrated</p>
+    </div>
+    
+    <!-- New Preview Section -->
+    <div class="file-preview" id="filePreview">
+      <h3>File Preview</h3>
+      <div id="previewContent"></div>
+      <button class="btn" onclick="closePreview()">Close Preview</button>
+    </div>
+
+    <div class="upload-controls">
+      <button class="btn" onclick="initiateUpload()">Secure Upload</button>
+      <button class="btn btn-secondary" onclick="window.location.href='/teacher'">Return to Nexus</button>
+    </div>
+
+    <div class="security-status">
+      <i class='bx bx-shield-alt-2'></i> All files encrypted with AES-256
+    </div>
+  </div>
+
+  <script>
+    let currentFile = null;
+
+    // Drag & Drop Handlers
+    const dropZone = document.getElementById('dropZone');
+    
+    dropZone.ondragover = (e) => {
+      e.preventDefault();
+      dropZone.style.borderColor = 'var(--neon-teal)';
+    };
+
+    dropZone.ondragleave = () => {
+      dropZone.style.borderColor = 'var(--glass-border)';
+    };
+
+    dropZone.ondrop = (e) => {
+      e.preventDefault();
+      handleFileSelect(e.dataTransfer.files);
+    };
+
+    function handleFileSelect(event) {
+      const files = event.target.files || event.dataTransfer.files;
+      if (files.length > 0) {
+        currentFile = files[0];
+        showFileInfo(currentFile);
+      }
+    }
+
+    function showFileInfo(file) {
+      document.getElementById('previewBox').style.display = 'block';
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('fileSize').textContent = formatFileSize(file.size);
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function initiateUpload() {
+      if (!currentFile) {
+        alert('Please select a document first');
+        return;
+      }
+
+      // Hide the preview box and show the upload animation
+      document.getElementById('previewBox').style.display = 'none';
+      document.getElementById('uploadAnimation').style.display = 'block';
+
+      const formData = new FormData();
+      formData.append('file', currentFile);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload_note', true);
+
+      // Update progress bar
+      xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+          const percentComplete = (e.loaded / e.total) * 100;
+          document.getElementById('progressBar').style.width = percentComplete + '%';
+        }
+      };
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          if (response.success) {
+            document.getElementById('uploadAnimation').style.display = 'none';
+            document.getElementById('uploadSuccess').style.display = 'block';
+            // After a short delay, show the file preview
+            setTimeout(() => {
+              previewFile(currentFile);
+            }, 1000);
+          } else {
+            alert("Upload failed: " + (response.error || "Unknown error"));
+            document.getElementById('uploadAnimation').style.display = 'none';
+          }
+        } else {
+          alert("Upload failed with status: " + xhr.status);
+          document.getElementById('uploadAnimation').style.display = 'none';
+        }
+      };
+
+      xhr.onerror = function() {
+        alert("An error occurred during the upload.");
+        document.getElementById('uploadAnimation').style.display = 'none';
+      };
+
+      xhr.send(formData);
+    }
+
+    function previewFile(file) {
+      const previewDiv = document.getElementById("filePreview");
+      const previewContent = document.getElementById("previewContent");
+      previewContent.innerHTML = ""; // Clear previous preview
+
+      if (file.type.includes("pdf")) {
+        // Use an iframe for PDF preview
+        const url = URL.createObjectURL(file);
+        const iframe = document.createElement("iframe");
+        iframe.src = url;
+        previewContent.appendChild(iframe);
+      } else if (file.type.includes("text") || file.type === "application/json" || file.type === "text/plain" || file.name.endsWith(".md")) {
+        // Read file as text and display in a pre element
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const pre = document.createElement("pre");
+          pre.textContent = e.target.result;
+          previewContent.appendChild(pre);
+        }
+        reader.readAsText(file);
+      } else {
+        previewContent.textContent = "Preview not available for this file type.";
+      }
+      previewDiv.style.display = "block";
+    }
+
+    function closePreview() {
+      document.getElementById("filePreview").style.display = "none";
+    }
+
+    // Initialize button states
+    document.getElementById('uploadAnimation').style.display = 'none';
+    document.getElementById('uploadSuccess').style.display = 'none';
+  </script>
+</body>
+</html>

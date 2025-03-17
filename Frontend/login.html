@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Secure Auth Portal</title>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --cyber-blue: #2A2F45;
+            --neon-teal: #00C9A7;
+            --hud-purple: #845EC2;
+            --interface-bg: rgba(42, 47, 69, 0.95);
+            --glass-border: rgba(132, 94, 194, 0.3);
+        }
 
         * {
             margin: 0;
@@ -20,189 +28,290 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(45deg, #0c60b3, 60%, #192b8f);
+            background: linear-gradient(45deg, #0A1020, #1A1F35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            background-image: 
+                linear-gradient(rgba(132, 94, 194, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 94, 194, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: scan 20s linear infinite;
+            pointer-events: none;
         }
 
         .container {
             width: 400px;
-            background: #f3f3f3;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
+            background: var(--interface-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 40px rgba(132, 94, 194, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
         h2 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 15px;
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .input-box {
-            width: 90%;
-            margin: 10px 0;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--neon-teal);
+            font-size: 1.2rem;
         }
 
         .input-box input {
             width: 100%;
-            padding: 10px;
-            border: none;
-            border-bottom: 2px solid rgba(0, 0, 0, .5);
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-box input:focus {
             outline: none;
-            background: transparent;
-            font-size: 15px;
+            border-color: var(--neon-teal);
+            box-shadow: 0 0 15px rgba(0, 201, 167, 0.2);
         }
 
         .btn {
-            width: 90%;
-            padding: 10px;
-            border-radius: 50px;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
             border: none;
-            background: linear-gradient(45deg, #0029ab, 60%, #2C3E50);
+            background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
             color: #fff;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s ease;
-            margin: 10px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
-            background: linear-gradient(45deg, #011e7d, 60%, #1f2b37);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(132, 94, 194, 0.4);
         }
 
-        .Form {
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: btnGlow 3s infinite;
+        }
+
+        .form-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .form-link {
+            color: var(--neon-teal);
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .form-link:hover {
+            color: var(--hud-purple);
+        }
+
+        .password-strength {
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            background: var(--neon-teal);
+            transition: width 0.3s ease;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes btnGlow {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--interface-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
             display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
+            z-index: 1000;
         }
 
-        .forgot-section {
-            margin-top: 10px;
-            font-size: 14px;
-            cursor: pointer;
-            color: #007bff;
-        }
-
-        .forgot-section:hover {
-            text-decoration: underline;
-        }
-
-        .returnBtn {
-            color: #007bff;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .returnBtn:hover {
-            text-decoration: underline;
-        }
-
-        .select-login {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .modal.active {
+            display: block;
         }
 
         @media (max-width: 480px) {
             .container {
-                width: 300px;
+                width: 90%;
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- Login As Page -->
-        <div class="Form select-login">
-            <h2>Login As</h2>
-            <button class="btn" onclick="showForm('student')">Student</button>
-            <button class="btn" onclick="showForm('teacher')">Teacher</button>
-            <button class="btn" onclick="comingSoon()">Parent</button>
+    <div class="cyber-grid"></div>
+    
+    <!-- Main Selection -->
+    <div class="container" id="main-form">
+        <h2>Secure Access</h2>
+        <button class="btn" onclick="showForm('student')">Student Portal</button>
+        <div class="form-footer">
+            <p>Faculty member? <span class="form-link" onclick="showForm('teacher')">Switch to Staff Login</span></p>
+            <p class="form-link" onclick="showForm('reset')">Recover Credentials</p>
         </div>
+    </div>
 
-        <!-- Student Login -->
-        <div class="Form login-form" id="student-form">
-            <h2>Student Login</h2>
-            <form action="/login" method="POST">
-                <div class="input-box">
-                    <i class='bx bxs-user'></i>
-                    <input type="text" name="username" placeholder="Enter Your Username*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-lock-alt'></i>
-                    <input type="password" name="password" placeholder="Enter Your Password*" required>
-                </div>
-                <div class="forgot-section">Forgot Password?</div>
-                <button class="btn">Login</button>
-                <p class="returnBtn" onclick="showForm('main')">Return</p>
-            </form>
+    <!-- Student Login -->
+    <div class="container login-form" id="student-form">
+        <h2>Student Login</h2>
+        <form action="/login" method="POST">
+            <div class="input-box">
+                <i class='bx bxs-user'></i>
+                <input type="text" name="username" placeholder="Academic ID" required>
+            </div>
+            <div class="input-box">
+                <i class='bx bxs-lock-alt'></i>
+                <input type="password" name="password" placeholder="Secure Passkey" required>
+            </div>
+            <button type="submit" class="btn">Authenticate</button>
+        </form>
+        <div class="form-footer">
+            <p class="form-link" onclick="showForm('main')"><i class='bx bx-arrow-back'></i> Back to Portal</p>
         </div>
+    </div>
 
-        <!-- Teacher Login -->
-        <div class="Form login-form" id="teacher-form">
-            <h2>Teacher Login</h2>
-            <form action="/login" method="POST">
-                <div class="input-box">
-                    <i class='bx bxs-user'></i>
-                    <input type="text" name="username" placeholder="Enter Your Username*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-lock-alt'></i>
-                    <input type="password" name="password" placeholder="Enter Your Password*" required>
-                </div>
-                <div class="forgot-section">Forgot Password?</div>
-                <button class="btn">Login</button>
-                <button type="button" class="btn small-btn" onclick="showForm('teacher-register')">Register as Teacher</button>
-                <p class="returnBtn" onclick="showForm('main')">Return</p>
-            </form>
+    <!-- Teacher Login -->
+    <div class="container login-form" id="teacher-form">
+        <h2>Staff Authentication</h2>
+        <form action="/login" method="POST">
+            <div class="input-box">
+                <i class='bx bxs-id-card'></i>
+                <input type="text" name="username" placeholder="Faculty ID" required>
+            </div>
+            <div class="input-box">
+                <i class='bx bxs-lock-alt'></i>
+                <input type="password" name="password" placeholder="Institutional Key" required>
+            </div>
+            <button type="submit" class="btn">Verify Identity</button>
+        </form>
+        <div class="form-footer">
+            <p class="form-link" onclick="showForm('teacher-register')">New Faculty Member?</p>
+            <p class="form-link" onclick="showForm('main')"><i class='bx bx-arrow-back'></i> Portal Selection</p>
         </div>
+    </div>
 
-        <!-- Teacher Registration -->
-        <div class="Form register-form" id="teacher-register-form">
-            <h2>Teacher Registration</h2>
-            <form action="/teacher_register" method="POST">
-                <div class="input-box">
-                    <i class='bx bxs-user'></i>
-                    <input type="text" name="name" placeholder="Enter Your Name*" required>
+    <!-- Teacher Registration -->
+    <div class="container login-form" id="teacher-register-form">
+        <h2>Faculty Enrollment</h2>
+        <form action="/teacher_register" method="POST">
+            <div class="input-box">
+                <i class='bx bxs-user-detail'></i>
+                <input type="text" name="name" placeholder="Full Name" required>
+            </div>
+            <div class="input-box">
+                <i class='bx bxs-envelope'></i>
+                <input type="email" name="email" placeholder="Institutional Email" required>
+            </div>
+            <div class="input-box">
+                <i class='bx bxs-shield'></i>
+                <input type="password" name="password" placeholder="Create Secure Key" required id="regPassword">
+                <div class="password-strength">
+                    <div class="strength-bar" id="strengthBar"></div>
                 </div>
-                <div class="input-box">
-                    <i class='bx bxs-envelope'></i>
-                    <input type="email" name="email" placeholder="Enter Your Email*" required>
-                </div>
-                <div class="input-box">
-                    <i class='bx bxs-lock-alt'></i>
-                    <input type="password" name="password" placeholder="Enter Your Password*" required>
-                </div>
-                <button class="btn">Register</button>
-                <p class="returnBtn" onclick="showForm('teacher')">Return</p>
-            </form>
+            </div>
+            <button type="submit" class="btn">Enroll Credentials</button>
+        </form>
+        <div class="form-footer">
+            <p class="form-link" onclick="showForm('teacher')">Existing Faculty?</p>
         </div>
+    </div>
 
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoon">
+        <h2>System Alert</h2>
+        <p>This module is currently undergoing security upgrades</p>
+        <p style="color: var(--neon-teal); margin: 1rem 0;">Estimated Activation: Q1 2024</p>
+        <button class="btn" onclick="document.getElementById('comingSoon').classList.remove('active')">Acknowledge</button>
     </div>
 
     <script>
         function showForm(form) {
-            let forms = document.querySelectorAll(".Form");
-            forms.forEach(f => f.style.display = "none");
-
-            if (form === "main") {
-                document.querySelector(".select-login").style.display = "flex";
+            const containers = document.querySelectorAll('.container');
+            containers.forEach(c => c.style.display = 'none');
+            
+            if(form === 'main') {
+                document.getElementById('main-form').style.display = 'block';
+            } else if(form === 'teacher-register') {
+                document.getElementById('teacher-register-form').style.display = 'block';
             } else {
-                document.getElementById(form + "-form").style.display = "flex";
+                document.getElementById(`${form}-form`).style.display = 'block';
             }
         }
 
         function comingSoon() {
-            alert("Feature Coming Soon");
+            document.getElementById('comingSoon').classList.add('active');
         }
 
-        // Show the initial "Login As" page
-        showForm("main");
-    </script>
+        // Password Strength Checker
+        document.getElementById('regPassword').addEventListener('input', function(e) {
+            const strength = Math.min(e.target.value.length * 10, 100);
+            document.getElementById('strengthBar').style.width = `${strength}%`;
+        });
 
+        // Initialize main form
+        showForm('main');
+    </script>
 </body>
 </html>
