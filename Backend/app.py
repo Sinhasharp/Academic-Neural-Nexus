@@ -12,7 +12,7 @@ app.secret_key = "supersecretkey"  # Required for session handling
 # Home - Redirect to Login
 @app.route('/')
 def home():
-    return redirect(url_for('login'))
+    return render_template('intro.html')
 
 # Login Page
 @app.route('/login', methods=['GET', 'POST'])
