@@ -281,6 +281,89 @@
             right: 0;
             color: rgba(255,255,255,0.5);
         }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-teal);
+            box-shadow: 0 5px 20px rgba(0, 201, 167, 0.2);
+        }
+
+        .feature-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #fff;
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            color: var(--neon-teal);
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 201, 167, 0.1);
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-status {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, var(--hud-purple), var(--neon-teal));
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--interface-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
 
         @keyframes scan {
             0% { transform: translateY(0); }
@@ -351,7 +434,7 @@
                 </div>
             </div>
 
-            <div class="feature-card" onclick="window.location.href='pop_quiz.html'">
+            <div class="feature-card" onclick="showFeatureModal('general')">
                 <div class="feature-content">
                     <div class="feature-icon">
                         <i class='bx bx-rocket'></i>
@@ -514,6 +597,46 @@
                 initializeChart();
             }
         });
+    </script>
+
+    <!-- Feature Modal -->
+    <div class="modal" id="featureModal">
+        <h3 id="modalTitle" style="margin-bottom: 1rem;"></h3>
+        <p id="modalContent" style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;"></p>
+        <button class="btn" onclick="document.getElementById('featureModal').classList.remove('active')">
+            Acknowledge
+        </button>
+    </div>
+
+    <script>
+        function showFeatureModal(feature) {
+            const modal = document.getElementById('featureModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+            
+            const features = {
+                'security': {
+                    title: 'Security Protocols',
+                    content: 'This module is currently undergoing security enhancements. Expected completion: Q3 2024'
+                },
+                'user-management': {
+                    title: 'User Management',
+                    content: 'Advanced user controls are being integrated with biometric authentication systems'
+                },
+                'audit': {
+                    title: 'System Audit',
+                    content: 'Automated audit systems are being calibrated for enhanced compliance monitoring'
+                },
+                'general': {
+                    title: 'Work in Progress',
+                    content: 'This part is still in developement and will be implemented in the later versions of this program.'
+                }
+            };
+
+            title.textContent = features[feature].title;
+            content.textContent = features[feature].content;
+            modal.classList.add('active');
+        }
     </script>
 </body>
 </html>
