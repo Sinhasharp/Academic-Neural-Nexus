@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Neural Hub | Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary: #00C9A7;
+            --secondary: #845EC2;
+            --background: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --neon-glow: 0 0 15px var(--primary);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            background-image: 
+                linear-gradient(rgba(132, 94, 194, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(132, 94, 194, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: scan 20s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .container {
+            position: relative;
+            z-index: 3;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--neon-glow);
+            animation: textFloat 3s ease-in-out infinite;
+        }
+
+        .cta-button {
+            position: relative;
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            margin-top: 2rem;
+            box-shadow: 0 0 25px rgba(0, 201, 167, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 35px rgba(0, 201, 167, 0.5);
+        }
+
+        .team-section {
+            padding: 4rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(132, 94, 194, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .team-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px) rotateZ(2deg);
+            box-shadow: 0 10px 30px rgba(0, 201, 167, 0.2);
+        }
+
+        .social-link {
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: 0.3s;
+        }
+
+        .social-link:hover::before {
+            width: 100%;
+        }
+
+        .project-description {
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 4rem 0;
+            border: 1px solid rgba(132, 94, 194, 0.3);
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-description::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 201, 167, 0.1),
+                transparent
+            );
+            animation: rotate 10s linear infinite;
+        }
+
+        footer {
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--glass);
+            position: relative;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes textFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="cyber-grid"></div>
+    
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Academic Neural Nexus</h1>
+                <p>Next-generation academic intelligence platform</p>
+                <button class="cta-button" onclick="window.location.href='/login'">
+                    Initiate Sequence
+                </button>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="project-description">
+                <h2>Project Overview</h2>
+                <p>
+                    Academic Neural Nexus is a next-generation academic intelligence platform designed to revolutionize learning ecosystems through AI-enhanced analytics and neural feedback systems. The platform integrates student performance tracking, AI-driven tutoring, secure document management, and faculty tools into a unified cyber-themed interface, fostering data-driven education and institutional efficiency.
+                </p>
+                <p>
+                    Built with futuristic aesthetics, the system employs neural network processing for real-time insights, encrypted collaboration, and adaptive learning pathways. Its modular architecture supports role-based access, dynamic visualization, and scalable academic operations while maintaining quality security protocols for sensitive educational data.
+                </p>
+            </div>
+
+            <div class="team-section">
+                <div class="team-card">
+                    <h3>Sarbojit Sinha</h3>
+                    <p></p>
+                    <a href="https://github.com/Sinhasharp" class="social-link" target="_blank">
+                        <i class='bx bxl-github'></i>
+                        GitHub Profile
+                    </a>
+                    <a href="https://www.linkedin.com/in/sarbojit-sinha/" class="social-link" target="_blank">
+                        <i class='bx bxl-linkedin'></i>
+                        LinkedIn Profile
+                    </a>
+                </div>
+
+                <div class="team-card">
+                    <h3>Harshil Motta</h3>
+                    <p></p>
+                    <a href= "https://github.com/Harshil43641" class="social-link" target="_blank">
+                        <i class='bx bxl-github'></i>
+                        GitHub Profile
+                    </a>
+                    <a href="https://www.linkedin.com/in/harshilmotta4364/" class="social-link" target="_blank">
+                        <i class='bx bxl-linkedin'></i>
+                        LinkedIn Profile
+                    </a>
+                </div>
+
+                <div class="team-card">
+                    <h3>Vaibhav Singh</h3>
+                    <p></p>
+                    <a href="https://github.com/Vaibhavsingh136" class="social-link" target="_blank">
+                        <i class='bx bxl-github'></i>
+                        GitHub Profile
+                    </a>
+                    <a href="https://www.linkedin.com/in/vaibhav013/" class="social-link" target="_blank">
+                        <i class='bx bxl-linkedin'></i>
+                        LinkedIn Profile
+                    </a>
+                </div>
+
+                <div class="team-card">
+                    <h3>Suchi Bajaj</h3>
+                    <p></p>
+                    <a href="#" class="social-link" target="_blank">
+                        <i class='bx bxl-github'></i>
+                        GitHub Profile
+                    </a>
+                    <a href="#" class="social-link" target="_blank">
+                        <i class='bx bxl-linkedin'></i>
+                        LinkedIn Profile
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Academic Neural Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Particles configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 150 },
+                color: { value: '#00C9A7' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5 },
+                size: { value: 2 },
+                move: {
+                    enable: true,
+                    speed: 3,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'bounce',
+                    bounce: true,
+                }
+            },
+            interactivity: {
+                detect_on: 'window',
+                events: {
+                    onhover: { enable: false },
+                    onclick: { enable: false },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Scroll animation observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.team-card').forEach((card) => {
+            observer.observe(card);
+        });
+
+        // Button ripple effect
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            let ripple = document.createElement('div');
+            ripple.style.position = 'absolute';
+            ripple.style.width = '50px';
+            ripple.style.height = '50px';
+            ripple.style.background = 'rgba(255, 255, 255, 0.4)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.left = e.offsetX + 'px';
+            ripple.style.top = e.offsetY + 'px';
+            ripple.style.animation = 'ripple 1s linear';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 1000);
+        });
+    </script>
+</body>
+</html>
