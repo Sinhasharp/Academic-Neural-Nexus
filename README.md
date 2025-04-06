@@ -1,4 +1,4 @@
-# Classroom_assistance
+# Academic Neural Nexus
 This is an AI powered Student -> Teacher Feedback as well as education System.
 
 Here the integrated AI system manages all the data necessary for both the teacher and the student's ends.
