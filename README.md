@@ -11,4 +11,4 @@ On the student's side it can help them summarize notes or generate pop quizes fr
 
 There is also a parent mode where a student's parents can access the system to learn about their ward's performance and other aspects. (Coming Soon...)
 
-**In order to run this code locally please generate a gemini key from https://aistudio.google.com/app/apikey and paste it in {YOUR API KEY HERE} FIELDS**
+**In order to run this code locally please generate a gemini key from https://aistudio.google.com/app/apikey and paste it in {YOUR API KEY HERE} FIELDS at .env.env and gemini_api files respectively.**
